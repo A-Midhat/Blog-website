@@ -11,20 +11,14 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 let posts = []
 
-app.get("/home", (req,res)=>{
-    let shortenedText
-    for (let i=0;i<posts.length;i++){
-        if (posts[i].blog.length>=80){
-            shortenedText = posts[i].blog.slice(0,80);
-        }
-    }
-    console.log(shortenedText);
-    res.render("index", {homePagePosts:posts, previewText:shortenedText});
+app.get("/", (req,res)=>{
+    
+    res.render("home", {homePagePosts:posts});
 })
-app.get("/home/posts/:postTitle", (req,res)=>{
+app.get("/posts/:postTitle", (req,res)=>{
     for (let i=0;i<posts.length;i++){
         if(req.params.postTitle.toLocaleUpperCase() == posts[i].title){
-            res.render("my_blogs", {
+            res.render("my-blogs", {
                 postTitle: posts[i].title ,
                 postBlog: posts[i].blog
             })
@@ -33,14 +27,13 @@ app.get("/home/posts/:postTitle", (req,res)=>{
     }
     
 })
-app.get("/error",(req,res)=>{
-    res.render("error");
-})
-app.post("/posts", (req,res)=>{
+
+app.post("/", (req,res)=>{
+    // search available to new written posts/not the already written in html.
     let search = req.body.searchBar;
     for (let i=0;i<posts.length;i++){
         if( search.toUpperCase() == posts[i].title){
-            res.render("my_blogs", {
+            res.render("my-blogs", {
                 postTitle: posts[i].title ,
                 postBlog: posts[i].blog
             })
@@ -57,7 +50,7 @@ app.get("/signup", (req,res)=>{
 app.post("/signup", (req,res)=>{
     let fname = req.body.fname;
     let lname = req.body.lname;
-    res.send(`Hello MR.${fname} ${lname}`); // render a success signup/in ejs page
+    res.render('success', {userName:fname.toUpperCase()}); // render a success signup/in ejs page
 
 })
 app.get("/new-blog", (req,res)=>{
@@ -74,10 +67,22 @@ app.post("/new-blog", (req,res)=>{
 
     console.log(posts);
     // res.send(`<h1>${title}</h1><p>${blog}</p>`);
-    res.redirect("/home");
+    res.redirect("/");
 })
+/*
+
+// add my-blog page for user written/liked blogs.
+
 app.get("/my-blogs", (req,res)=>{
-    res.render("my_blogs")
+    res.render("my_blogs", {
+        postTitle:posts.title,
+        postBlog:posts.
+    })
+})
+*/ 
+// add header / footer for search error
+app.get("/error",(req,res)=>{
+    res.render("error");
 })
 
 app.listen(3000, ()=>{

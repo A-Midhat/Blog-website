@@ -1,0 +1,15 @@
+<%- include('header') -%>
+    
+    
+    <div class="blogList">
+        <% for(let i=0;i<homePagePosts.length;i++) { %>
+        <div class="blog">
+            <h3><%= homePagePosts[i].title %></h3>
+            <!-- <p><i><%= homePagePosts[i].blog %></i></p> -->
+            <p><i><%= homePagePosts[i].blog.slice(0,100) + " ..." %></i>
+            <a href="my-blogs">Read More.</a></p>
+        </div>
+        <% } %>
+        
+    </div>
+<%- include('footer') -%>    
